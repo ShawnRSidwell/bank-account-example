@@ -48,12 +48,12 @@ function reducer(state, action) {
     case "payLoan":
       return {
         ...state,
-        balance: state.balance - action.payload,
-        loan: state.loan - action.payload,
+        balance: state.balance - state.loan,
+        loan: 0,
       };
     case "closeAccount":
-      if (state.loan === 0 && state.balance === 0) return { ...initialState };
-      return state;
+      if (state.loan > 0 || state.balance !== 0) return state;
+      return initialState;
     default:
       throw new Error("Action not supported");
   }
@@ -113,7 +113,7 @@ export default function App() {
       <p>
         <button
           onClick={() => {
-            dispatch({ type: "payLoan", payload: 5000 });
+            dispatch({ type: "payLoan" });
           }}
           disabled={!isActive || !loan}
         >
