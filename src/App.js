@@ -39,11 +39,11 @@ function reducer(state, action) {
       };
 
     case "requestLoan":
+      if (state.loan > 0) return state;
       return {
         ...state,
-        balance:
-          state.loan === 0 ? state.balance + action.payload : state.balance,
-        loan: state.loan === 0 ? state.loan + action.payload : state.loan,
+        balance: state.balance + action.payload,
+        loan: action.payload,
       };
     case "payLoan":
       return {
@@ -53,7 +53,7 @@ function reducer(state, action) {
       };
     case "closeAccount":
       if (state.loan === 0 && state.balance === 0) return { ...initialState };
-      return { ...state };
+      return state;
     default:
       throw new Error("Action not supported");
   }
